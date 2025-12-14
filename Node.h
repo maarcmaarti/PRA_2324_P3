@@ -18,5 +18,4 @@ public:
     }
 };
 
-#endif // NODE_H
-
+#endif
