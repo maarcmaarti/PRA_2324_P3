@@ -21,20 +21,20 @@ class HashTable: public Dict<V> {
 	
 	int max;
 	
-	ListLinked<TableEntryListLinked<TableEntry<V>>* table;
+	ListLinked<TableEntry<V>>* table;
 
-	int h(std::string key){
+	int h(std::string key)const{
 		int sum = 0;
 		for(char c : key){
 			sum += static_cast<int>(c);
 		}
-	return sum % size;
+	return sum % max;
 	}
 
     public:
 
         HashTable(int size) : n(0), max(size){
-		table=new ListLinked<TableEntryListLinked<TableEntry<V>>[max];	
+		table=new ListLinked<TableEntry<V>>[max];	
 	}
 	
 	~HashTable(){
@@ -44,7 +44,7 @@ class HashTable: public Dict<V> {
 	int capacity()const{
 		return max;
 	}
-	void insert(const std::string& key, const V& value) override {
+	void insert(const std::string key, const V value) override {
                 int idx = h(key);
                 TableEntry<V> entry(key, value);
 
@@ -76,7 +76,7 @@ class HashTable: public Dict<V> {
         throw std::runtime_error("Clave no encontrada: " + key);
     }
         
-	V search(const std::string& key) const override {
+	V search(const std::string key) override {
         	int idx = h(key);
        	 	TableEntry<V> entry(key);
 
@@ -89,7 +89,7 @@ class HashTable: public Dict<V> {
     }
 
 
-	 V remove(const std::string& key) override {
+	 V remove(std::string key) override {
         	int idx = h(key);
         	TableEntry<V> entry(key);
 
@@ -103,8 +103,8 @@ class HashTable: public Dict<V> {
         	n--;
      	   return val;
     }
-    int entries() const override {
+    int entries() override {
         return n;
     }
-
+};
 #endif
