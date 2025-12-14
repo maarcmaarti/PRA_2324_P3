@@ -7,45 +7,45 @@
 #include "BSTree.h"
 #include "TableEntry.h"
 
+using namespace std;
+
 template <typename V>
 class BSTreeDict: public Dict<V> {
 
     private:
-    BSTree<TableEntry<V>>* tree;
+    // miembros publicos
+	BSTree<TableEntry<V>>* tree ;
     public:
-    BSTreeDict(){
-        tree = new BSTree<TableEntry<V>>();
+    // miembros privados     
+   	 void insert(string key, V value) override{
+        TableEntry<V> aux = TableEntry<V>(key, value);
+        tree->insert(aux); 
     }
-    ~BSTreeDict(){
+    	V search(string key)override{
+        TableEntry<V> aux = TableEntry<V>(key);
+        return tree->search(aux).value;
+    }
+   	V remove(string key)override{
+        TableEntry<V> aux = TableEntry<V>(key);
+        V pos = search(key);
+        tree->remove(aux);
+        return pos;
+    }
+    	int entries() override{
+        return tree->size();
+    }
+	BSTreeDict(){
+        this->tree = new BSTree<TableEntry<V>>();
+    }
+	~BSTreeDict(){
         delete tree;
     }
-     void insert(std::string key, V value) override {
-        TableEntry<V> te(key, value);
-        tree->insert(te);
-    
-    }
-    V search(std::string key) override {
-        TableEntry<V> te(key);
-        TableEntry<V>* result = tree->search(te);
-
-        if (result == nullptr)
-            throw std::runtime_error("Clave no encontrada en BSTreeDict");
-
-        return result->value;
-    }
-    void remove(std::string key) override {
-        TableEntry<V> te(key);
-        tree->remove(te);
-    }
-    std::string entries() override {
-        return tree->inorder();
-    }
-    V operador[](std::string key) {
-        return search(key);
-    }
-    friend std::ostream& operator<<(std::ostream &out, const BSTreeDict<V>& bs){
-        out << bs.tree->inorder();
+	friend std::ostream& operator<<(std::ostream &out, const BSTreeDict<V> &bs){
+        out << *bs.tree << endl;
         return out;
+    }  
+	V operator[](std::string key){
+        return search(key);
     }
 };
 
